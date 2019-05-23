@@ -3,25 +3,26 @@ import * as Sentry from '@sentry/browser';
 
 const crashReporter = store => next => action => {
   //console.log(`crash reporter loaded with action: ${JSON.stringify(action)}`);
-
-  // we got a thunk
+  let nextState;
   if (typeof action === 'function') {
-    //console.log(`thunk dispatch with action ${action}`);
-    const wrap = async (dispatch, getState, extraArgument) => {
+    let run = async () => { 
       try {
-        //console.log(`invoking wrap with params: ${dispatch}, ${getState} and action ${action} and  next: ${next}`);
-        
-        await action(dispatch, getState, extraArgument);
-      } catch (e) {
-        console.log(e);
+        nextState = await next(action);
+      } catch (err) {
+        console.log(`error in crash reporter: ${err}`);
       }
-    }
-    return next(wrap);
+    };
+    run();
+  } else {
+    nextState = next(action);
   }
-
+  
+  return nextState;
+  /*
   try {
     return next(action);
   } catch (err) {
+    console.log(`error in crash reporter: ${err}`);
     let sentryEventId;
     // Send replay URL to Sentry
     Sentry.withScope(scope => {
@@ -47,7 +48,7 @@ const crashReporter = store => next => action => {
       state: store.getState(), //NOTE: strip out any sensitive fields first
     });
     throw err;
-  }
+  }*/
 };
 
 export default crashReporter;
