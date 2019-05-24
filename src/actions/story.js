@@ -12,8 +12,8 @@ const doAddStories = stories => ({
 const doFetchStoriesAsync = (query, doFetchStories = fetchStories) => async dispatch => {
   dispatch(doBeginLoad());
   let response;
-    if (query === 'break it') throw new Error('Broken on demand!');
-    response = await doFetchStories(query);
+  if (query === 'break it') throw new Error('Broken on demand!');
+  response = await doFetchStories(query);
   dispatch(doAddStories(response.hits));
   dispatch(doEndLoad());
 };

@@ -11,7 +11,7 @@ const logger = createLogger();
 const store = createStore(
   rootReducer,
   undefined,
-  applyMiddleware(thunk, logger)
+  applyMiddleware(crashReporter, thunk)
 );
 
 export default store;

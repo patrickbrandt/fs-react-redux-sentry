@@ -19,7 +19,6 @@ const SearchStories = ({ onFetchStories, onLoadQuery, onSaveQuery, query }) => {
   const onSubmit = e => {
     const q = inputEl.current.value;
     onSaveQuery(q);
-    onFetchStories(q);
     e.preventDefault();
   };
 
